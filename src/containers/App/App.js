@@ -6,10 +6,10 @@ import Input from '../Input';
 
 class App extends Component {
   render() {
-    const activeItem = 'account';
+    const {text} = this.props;
     return (
-      <div className="App">
-        <Input />
+      <div className='App'>
+        <Input></Input>
       </div>
     );
   }

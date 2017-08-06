@@ -12,12 +12,12 @@ export const calculate = (operation, exp) => {
       .then(json => {
         if (json.result.split(' ')[1]) {
           dispatch({
-            type: operation,
+            type: operation.toUpperCase(),
             payload: json.result.split(' ').join('*')
           });
         } else {
           dispatch({
-            type: operation,
+            type: operation.toUpperCase(),
             payload: json.result
           })
         }

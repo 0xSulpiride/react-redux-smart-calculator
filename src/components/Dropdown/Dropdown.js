@@ -6,12 +6,16 @@ export default class extends Component {
     super(props);
     this.handleChange = this.handleChange.bind(this);
   }
-  handleChange(e, { value }) {
-    console.log(value);
+  handleChange(e, {options,value}) {
+    this.props.onChange(value, options.filter(k => k.value == value)[0].placeholder);
   }
   render() {
     return (
-      <Dropdown placeholder='Simplify' selection options={this.props.options} onChange={this.handleChange} />
+      <Dropdown
+        selection
+        placeholder='Simplify'
+        options={this.props.options} 
+        onChange={this.handleChange} />
     );
   }
 }

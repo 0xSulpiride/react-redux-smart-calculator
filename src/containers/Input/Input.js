@@ -1,36 +1,89 @@
 import React, { Component } from 'react';
-import { Input } from 'semantic-ui-react';
+import { Input, Button } from 'semantic-ui-react';
 import Dropdown from '../../components/Dropdown';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as newtonActions from '../../actions/newton';
 
 const dropdownOptions = [
-  { text: 'Simplify', value: 'simplify', key: 'simplify' },
-  { text: 'Factor', value: 'factor', key: 'factor' },
-  { text: 'Derive', value: 'derive', key: 'derive' },
-  { text: 'Integrate', value: 'integrate', key: 'integrate' },
-  { text: 'Cos', value: 'cos', key: 'cos' },
-  { text: 'Sin', value: 'sin', key: 'sin' },
-  { text: 'Tangent', value: 'tangent', key: 'tangent' },
-  { text: 'Arccos', value: 'arccos', key: 'arccos' },
-  { text: 'Arcsin', value: 'arcsin', key: 'arcsin' },
-  { text: 'Arctan', value: 'arctan', key: 'arctan' },
-  { text: 'Abs', value: 'abs', key: 'abs' },
-  { text: 'Logarithm', value: 'logarithm', key: 'logarithm' }
+  { text: 'Simplify', value: 'simplify', key: 'simplify', placeholder:'2^2+2(2)' },
+  { text: 'Factor', value: 'factor', key: 'factor', placeholder: 'x^2 + 2x' },
+  { text: 'Derive', value: 'derive', key: 'derive', placeholder: 'x^2+2x' },
+  { text: 'Integrate', value: 'integrate', key: 'integrate', placeholder: 'x^2+2x' },
+  { text: 'Cos', value: 'cos', key: 'cos', placeholder: 'pi' },
+  { text: 'Sin', value: 'sin', key: 'sin', placeholder: '0' },
+  { text: 'Tangent', value: 'tangent', key: 'tangent', placeholder: '0' },
+  { text: 'Arccos', value: 'arccos', key: 'arccos', placeholder: '1' },
+  { text: 'Arcsin', value: 'arcsin', key: 'arcsin', placeholder: '0' },
+  { text: 'Arctan', value: 'arctan', key: 'arctan', placeholder: '0' },
+  { text: 'Abs', value: 'abs', key: 'abs', placeholder: '-1' },
+  { text: 'Logarithm', value: 'logarithm', key: 'logarithm', placeholder: '2l8' }
 ];
 
-export default class extends Component {
+const mapState = (state) => ({
+  type: state.newton.type,
+  text: state.newton.payload,
+  spinner: state.spinner
+});
+
+const mapDispatch = (dispatch) => ({
+  calculate: bindActionCreators(newtonActions.calculate, dispatch)
+});
+
+export default connect(mapState, mapDispatch)(class extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      input: this.props.text,
+      type: 'simplify',
+      placeholder: '2^2+2'
+    }
+    this.handleDropdownChange = this.handleDropdownChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      input: nextProps.text,
+      spinner: nextProps.spinner
+    });
+  }
+  handleDropdownChange(operation, placeholder) {
+    this.setState({
+      type: operation,
+      placeholder
+    })
+  }
+  handleInputChange(e, {value}) {
+    this.setState({
+      input: value
+    });
+  }
+  handleClick() {
+    this.props.calculate(this.state.type, this.state.input);
+  }
   render() {
+    const {text, spinner} = this.props;
     return (
       <div id="Input">
         <Input
-          label={<Dropdown options={dropdownOptions} />}
-          labelPosition='left'
+          placeholder={this.state.placeholder}
+          onChange={this.handleInputChange}
           fluid
-          loading={null}
-          placeholder='2^2+2'
-          action={{
-            color: 'blue', labelPosition: 'right', icon: 'calculator', content: 'Calculate'
-          }} />
+          value={this.state.input}
+        >
+          <Dropdown options={dropdownOptions} onChange={this.handleDropdownChange} />
+          <input disabled={spinner || null}/>
+          <Button
+            loading={spinner || null}
+            onClick={this.handleClick}
+            type='submit'
+            color='blue'
+            icon='calculator'
+            content='Calculate'
+            labelPosition='right' />
+        </Input>
       </div>
     );
   }
-}
+});
