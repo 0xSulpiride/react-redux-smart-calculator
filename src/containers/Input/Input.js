@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import * as newtonActions from '../../actions/newton';
 
 const dropdownOptions = [
-  { text: 'Simplify', value: 'simplify', key: 'simplify', placeholder:'2^2+2(2)' },
+  { text: 'Simplify', value: 'simplify', key: 'simplify', placeholder: '2^2+2(2)' },
   { text: 'Factor', value: 'factor', key: 'factor', placeholder: 'x^2 + 2x' },
   { text: 'Derive', value: 'derive', key: 'derive', placeholder: 'x^2+2x' },
   { text: 'Integrate', value: 'integrate', key: 'integrate', placeholder: 'x^2+2x' },
@@ -27,14 +27,14 @@ const mapState = (state) => ({
 });
 
 const mapDispatch = (dispatch) => ({
-  calculate: bindActionCreators(newtonActions.calculate, dispatch)
+  calculate: bindActionCreators(newtonActions.calculate, dispatch),
+  setTypeAndText: bindActionCreators(newtonActions.setTypeAndText, dispatch)
 });
 
 export default connect(mapState, mapDispatch)(class extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: this.props.text,
       type: 'simplify',
       placeholder: '2^2+2'
     }
@@ -49,31 +49,29 @@ export default connect(mapState, mapDispatch)(class extends Component {
     });
   }
   handleDropdownChange(operation, placeholder) {
+    this.props.setTypeAndText(operation, this.props.text);
     this.setState({
-      type: operation,
       placeholder
     })
   }
   handleInputChange(e, {value}) {
-    this.setState({
-      input: value
-    });
+    this.props.setTypeAndText(this.props.type, value);
   }
   handleClick() {
-    this.props.calculate(this.state.type, this.state.input);
+    this.props.calculate(this.props.type, this.props.text);
   }
   render() {
-    const {text, spinner} = this.props;
+    const {spinner} = this.props;
     return (
       <div id="Input">
         <Input
           placeholder={this.state.placeholder}
           onChange={this.handleInputChange}
           fluid
-          value={this.state.input}
+          value={this.props.text}
         >
-          <Dropdown options={dropdownOptions} onChange={this.handleDropdownChange} />
-          <input disabled={spinner || null}/>
+          {this.props.showDropdown && <Dropdown options={dropdownOptions} onChange={this.handleDropdownChange} value={this.props.type.toLowerCase()} />}
+          <input disabled={spinner || null} />
           <Button
             loading={spinner || null}
             onClick={this.handleClick}

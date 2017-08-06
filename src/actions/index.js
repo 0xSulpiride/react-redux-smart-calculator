@@ -1,5 +1,3 @@
-import newton from './newton';
-
 export const SIMPLIFY = 'SIMPLIFY';
 export const FACTOR = 'FACTOR';
 export const DERIVE = 'DERIVE';
@@ -14,3 +12,4 @@ export const ABS = 'ABS';
 export const LOGARITHM = 'LOGARITHM';
 export const SHOW_SPINNER = 'SHOW_SPINNER';
 export const HIDE_SPINNER = 'HIDE_SPINNER';
+export const SET_TYPE_AND_TEXT = 'SET_TYPE_AND_TEXT';

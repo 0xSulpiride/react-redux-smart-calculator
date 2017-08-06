@@ -6,6 +6,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.SET_TYPE_AND_TEXT:
+      return {
+        type: action.newType,
+        payload: action.payload
+      }
     case actionTypes.SIMPLIFY:
     case actionTypes.FACTOR:
     case actionTypes.DERIVE:

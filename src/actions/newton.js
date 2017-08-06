@@ -10,19 +10,33 @@ export const calculate = (operation, exp) => {
     fetch(createUrl(operation, exp))
       .then(data => data.json())
       .then(json => {
-        if (json.result.split(' ')[1]) {
+        console.log(json);
+        if (json.error) {
           dispatch({
             type: operation.toUpperCase(),
-            payload: json.result.split(' ').join('*')
+            payload: 'Unable to perform calculation'
           });
-        } else {
-          dispatch({
-            type: operation.toUpperCase(),
-            payload: json.result
-          })
         }
+        dispatch({
+          type: operation.toUpperCase(),
+          payload: json.result
+        });
         dispatch(spinner.hideSpinner());
-      })
+      }).catch(err => {
+        dispatch({
+          type: operation.toUpperCase(),
+          payload: 'Unable to perform calculation'
+        });
+        dispatch(spinner.hideSpinner());
+      });
+  }
+}
+
+export const setTypeAndText = (type, text) => {
+  return {
+    type: actionTypes.SET_TYPE_AND_TEXT,
+    newType: type,
+    payload: text
   }
 }
 
