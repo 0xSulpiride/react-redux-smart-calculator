@@ -15,6 +15,9 @@ class Keyboard extends Component {
   handleClick(e) {
     const value = e.target.innerText;
     switch (value) {
+      case 'C':
+        this.props.setTypeAndText(this.props.type, '');
+        break;
       case '+/-':
         this.props.setTypeAndText(actionsTypes.ABS, this.props.text);
         break;

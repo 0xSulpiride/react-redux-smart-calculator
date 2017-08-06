@@ -10,7 +10,6 @@ export const calculate = (operation, exp) => {
     fetch(createUrl(operation, exp))
       .then(data => data.json())
       .then(json => {
-        console.log(json);
         if (json.error) {
           dispatch({
             type: operation.toUpperCase(),

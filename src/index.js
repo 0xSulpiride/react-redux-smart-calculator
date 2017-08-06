@@ -7,7 +7,6 @@ import 'semantic-ui-css/semantic.min.css';
 import './index.css';
 
 const store = configureStore();
-// store.subscribe(() => console.log(store.getState()));
 
 ReactDOM.render(
   <Provider store={store}>
